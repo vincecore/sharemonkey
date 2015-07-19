@@ -1,0 +1,22 @@
+{
+  "name": "sharemonkey/sharemonkey",
+  "description": "ShareMonkey",
+  "license": "MIT",
+  "authors": [
+      {
+          "name": "Vincent Verhasselt",
+          "email": "vincent.verhasselt@gmail.com"
+      }
+  ],
+  "require": {
+      "php": ">=5.5",
+      "symfony/framework-bundle": "~2.3",
+      "doctrine/mongodb-odm": "1.0.*@dev",
+      "doctrine/mongodb-odm-bundle": "3.0.*@dev",
+      "embed/embed": "^2.3",
+      "coderstephen/slack-client" : "~0.2"
+  },
+  "autoload": {
+     "psr-4": { "ShareMonkey\\": "" }
+  }
+}
