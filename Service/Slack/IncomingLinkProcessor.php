@@ -5,6 +5,8 @@ namespace ShareMonkey\Service\Slack;
 use Doctrine\Common\Persistence\ObjectManager;
 use Embed\Embed;
 use Psr\Log\LoggerInterface;
+use ShareMonkey\Document\Link;
+use ShareMonkey\Document\User;
 use ShareMonkey\Model\Slack\Message;
 use ShareMonkey\Repository\UserRepository;
 
@@ -68,7 +70,7 @@ class IncomingLinkProcessor implements MessageProcessor
 
         $user = $this->userRepository->findOneBySlackId($message->getUserId());
         if (!$user instanceof User) {
-            $this->logger->error(sprintf('User "%s" not found', $message->getUserId()));
+            $this->logger->error(sprintf('User "%s" not found', $message->getUserId()->getValue()));
             return;
         }
 
