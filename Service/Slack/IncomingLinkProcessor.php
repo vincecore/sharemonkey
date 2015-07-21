@@ -33,7 +33,7 @@ class IncomingLinkProcessor implements MessageProcessor
     /**
      * @var string
      */
-    private $shareMonkeySlackId = 'U07E5UPT6';
+    private $shareMonkeySlackId;
 
     /**
      * @param UserRepository $userRepository
@@ -43,12 +43,14 @@ class IncomingLinkProcessor implements MessageProcessor
     public function __construct(
         UserRepository $userRepository,
         ObjectManager $objectManager,
+        $shareMonkeySlackId,
         LoggerInterface $logger
     ) {
 
         $this->objectManager = $objectManager;
         $this->logger = $logger;
         $this->userRepository = $userRepository;
+        $this->shareMonkeySlackId = $shareMonkeySlackId;
     }
 
     /**
