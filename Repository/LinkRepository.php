@@ -4,6 +4,7 @@ namespace ShareMonkey\Repository;
 
 use Doctrine\ODM\MongoDB\DocumentRepository;
 use ShareMonkey\Document\Link;
+use ShareMonkey\Document\Tag;
 use ShareMonkey\Model\Slack\MessageId;
 
 class LinkRepository extends DocumentRepository
@@ -23,5 +24,14 @@ class LinkRepository extends DocumentRepository
     public function findOneBySlackMessageId(MessageId $messageId)
     {
         return $this->findOneBy(array('slackId' => $messageId->getValue()));
+    }
+
+    /**
+     * @param Tag $tag
+     * @return Link[]
+     */
+    public function findByTag(Tag $tag)
+    {
+        return $this->findBy(array('tags.value' => $tag->getValue()));
     }
 }

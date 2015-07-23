@@ -6,6 +6,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Embed\Embed;
 use Psr\Log\LoggerInterface;
 use ShareMonkey\Document\Link;
+use ShareMonkey\Document\Tag;
 use ShareMonkey\Document\User;
 use ShareMonkey\Model\Slack\Message;
 use ShareMonkey\Repository\UserRepository;
@@ -64,6 +65,7 @@ class IncomingLinkProcessor implements MessageProcessor
         }
 
         $urls = $this->findUrls($message->getText());
+        $tags = $this->findTags($message->getText());
 
         if (count($urls) === 0) {
             $this->logger->debug('No urls found in message');
@@ -86,7 +88,8 @@ class IncomingLinkProcessor implements MessageProcessor
                 $user,
                 $message->getCreatedAt(),
                 ($info->getTitle() ?: $message->getText()),
-                $url
+                $url,
+                $tags
             );
 
             $this->objectManager->persist($link);
@@ -146,5 +149,24 @@ class IncomingLinkProcessor implements MessageProcessor
         }
 
         return array();
+    }
+
+    /**
+     * @param string $text
+     * @return array
+     */
+    private function findTags($text)
+    {
+        $pattern = '/#([a-z](-?[a-z0-9]+)*)/i';
+
+        $tags = array();
+
+        if (preg_match_all($pattern, $text, $matches)) {
+            foreach ($matches[1] as $match) {
+                $tags[] = new Tag($match);
+            }
+        }
+
+        return $tags;
     }
 }

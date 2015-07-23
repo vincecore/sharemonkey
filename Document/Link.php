@@ -31,6 +31,11 @@ class Link
     private $url;
 
     /**
+     * @var Tag[]
+     */
+    private $tags;
+
+    /**
      * @var string
      */
     private $author;
@@ -62,6 +67,7 @@ class Link
 
     private function __construct()
     {
+        $this->tags = new ArrayCollection();
         $this->likes = new ArrayCollection();
         $this->dislikes = new ArrayCollection();
     }
@@ -70,6 +76,7 @@ class Link
      * @param $slackId
      * @param $title
      * @param $url
+     * @param Tag[] $tags
      * @return Link
      */
     public static function fromSlack(
@@ -77,7 +84,8 @@ class Link
         User $user,
         Datetime $createdTs,
         $title,
-        $url
+        $url,
+        array $tags = array()
     ) {
         $link = new Link();
         $link->slackId = $slackId->getValue();
@@ -87,7 +95,19 @@ class Link
         $link->url = $url;
         $link->author = $user->getName();
 
+        foreach ($tags as $tag) {
+            $link->addTag($tag);
+        }
+
         return $link;
+    }
+
+    /**
+     * @param Tag $tag
+     */
+    private function addTag(Tag $tag)
+    {
+        $this->tags[] = $tag;
     }
 
     /**
@@ -136,6 +156,14 @@ class Link
     public function getTitle()
     {
         return $this->title;
+    }
+
+    /**
+     * @return Tag[]|ArrayCollection
+     */
+    public function getTags()
+    {
+        return $this->tags;
     }
 
     /**
