@@ -14,7 +14,7 @@ final class Tag
      */
     public function __construct($value)
     {
-        $this->value = $value;
+        $this->value = strtolower($value);
     }
 
     /**

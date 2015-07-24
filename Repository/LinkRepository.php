@@ -9,12 +9,15 @@ use ShareMonkey\Model\Slack\MessageId;
 
 class LinkRepository extends DocumentRepository
 {
+    const SORT_RECENT = 'recent';
+    const SORT_TOP = 'top';
+
     /**
      * @return Link[]
      */
-    public function findForOverview(array $sort)
+    public function findForOverview($sort)
     {
-        return $this->findBy(array(), $sort);
+        return $this->findBy(array(), $this->getSort($sort));
     }
 
     /**
@@ -30,8 +33,27 @@ class LinkRepository extends DocumentRepository
      * @param Tag $tag
      * @return Link[]
      */
-    public function findByTag(Tag $tag)
+    public function findByTag(Tag $tag, $sort)
     {
-        return $this->findBy(array('tags.value' => $tag->getValue()));
+        return $this->findBy(array('tags.value' => $tag->getValue()), $this->getSort($sort));
+    }
+
+    /**
+     * @param $sort
+     * @return array
+     */
+    private function getSort($sort)
+    {
+        switch ($sort) {
+            case self::SORT_TOP:
+                return array(
+                    'score' => '1',
+                );
+                break;
+        }
+
+        return array(
+            'createdTs' => '-1',
+        );
     }
 }
