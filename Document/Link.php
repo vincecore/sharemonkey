@@ -76,7 +76,7 @@ class Link
      * @param $slackId
      * @param $title
      * @param $url
-     * @param Tag[] $tags
+     * @param array $tags
      * @return Link
      */
     public static function fromSlack(
@@ -96,7 +96,7 @@ class Link
         $link->author = $user->getName();
 
         foreach ($tags as $tag) {
-            $link->addTag($tag);
+            $link->addTag(new Tag($tag));
         }
 
         return $link;

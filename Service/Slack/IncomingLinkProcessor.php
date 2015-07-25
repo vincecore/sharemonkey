@@ -9,6 +9,7 @@ use ShareMonkey\Document\Link;
 use ShareMonkey\Document\Tag;
 use ShareMonkey\Document\User;
 use ShareMonkey\Model\Slack\Message;
+use ShareMonkey\Model\Text;
 use ShareMonkey\Repository\UserRepository;
 
 /**
@@ -64,8 +65,9 @@ class IncomingLinkProcessor implements MessageProcessor
             return;
         }
 
-        $urls = $this->findUrls($message->getText());
-        $tags = $this->findTags($message->getText());
+        $text = $message->getText();
+        $urls = $text->getUrls();
+        $tags = $text->getTags();
 
         if (count($urls) === 0) {
             $this->logger->debug('No urls found in message');
@@ -104,9 +106,9 @@ class IncomingLinkProcessor implements MessageProcessor
      * @param string $text
      * @return bool
      */
-    private function shareMonkeyIsMentioned($text)
+    private function shareMonkeyIsMentioned(Text $text)
     {
-        $mentions = $this->findMentions($text);
+        $mentions = $text->getMentions();
         foreach ($mentions as $mention) {
             if ($mention == $this->shareMonkeySlackId) {
                 return true;
@@ -114,59 +116,5 @@ class IncomingLinkProcessor implements MessageProcessor
         }
 
         return false;
-    }
-
-    /**
-     * @param string $text
-     * @return array
-     */
-    private function findMentions($text)
-    {
-        $pattern = '/<@(.*?)>/s';
-        if (preg_match_all($pattern, $text, $matches)) {
-            list(, $mentions) = ($matches);
-            return $mentions;
-        }
-
-        return array();
-    }
-
-    /**
-     * @param string $text
-     * @return array
-     */
-    private function findUrls($text)
-    {
-        $pattern = '/<(.*?)>/s'; // Everything between <>
-        if (preg_match_all($pattern, $text, $matches)) {
-            $links = array();
-            foreach ($matches[1] as $match) {
-                if (strpos($match, 'http') !== false) {
-                    $links[] = $match;
-                }
-            }
-            return $links;
-        }
-
-        return array();
-    }
-
-    /**
-     * @param string $text
-     * @return array
-     */
-    private function findTags($text)
-    {
-        $pattern = '/#([a-z](-?[a-z0-9]+)*)/i';
-
-        $tags = array();
-
-        if (preg_match_all($pattern, $text, $matches)) {
-            foreach ($matches[1] as $match) {
-                $tags[] = new Tag($match);
-            }
-        }
-
-        return $tags;
     }
 }

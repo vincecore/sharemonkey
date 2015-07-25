@@ -2,13 +2,15 @@
 
 namespace ShareMonkey\Model\Slack;
 
+use ShareMonkey\Model\Text;
+
 /**
  * Represent a message coming from Slack
  */
 final class Message
 {
     /**
-     * @var string
+     * @var Text
      */
     private $text;
 
@@ -42,7 +44,7 @@ final class Message
     ) {
         $message = new Message();
 
-        $message->text = $text;
+        $message->text = new Text($text);
         $message->createdAt = \DateTime::createFromFormat('U.u', $timestamp);
         $message->createdAt->setTimezone(new \DateTimeZone(date_default_timezone_get()));
         $message->userId = new UserId($user);
@@ -52,7 +54,7 @@ final class Message
     }
 
     /**
-     * @return string
+     * @return Text
      */
     public function getText()
     {

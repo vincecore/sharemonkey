@@ -2,6 +2,8 @@
 
 namespace ShareMonkey\Document;
 
+use Assert\Assertion;
+
 final class Tag
 {
     /**
@@ -14,6 +16,10 @@ final class Tag
      */
     public function __construct($value)
     {
+        Assertion::string($value);
+        Assertion::minLength($value, 1);
+        Assertion::maxLength($value, 50);
+
         $this->value = strtolower($value);
     }
 
