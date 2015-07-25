@@ -13,8 +13,7 @@
       "symfony/framework-bundle": "~2.3",
       "doctrine/mongodb-odm": "1.0.*@dev",
       "doctrine/mongodb-odm-bundle": "3.0.*@dev",
-      "embed/embed": "^2.3",
-      "coderstephen/slack-client" : "~0.2",
+      "embed/embed": "~2.3",
       "beberlei/assert": "~2.3"
   },
   "autoload": {

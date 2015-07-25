@@ -6,7 +6,6 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Embed\Embed;
 use Psr\Log\LoggerInterface;
 use ShareMonkey\Document\Link;
-use ShareMonkey\Document\Tag;
 use ShareMonkey\Document\User;
 use ShareMonkey\Model\Slack\Message;
 use ShareMonkey\Model\Text;
